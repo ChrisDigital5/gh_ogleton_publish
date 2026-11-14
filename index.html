@@ -1,35 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test Site</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0b1020;
-      color: #e8eefc;
-      font-family: system-ui, sans-serif;
-    }
-    .card {
-      text-align: center;
-      padding: 2rem;
-      border: 1px solid #2c3a5e;
-      border-radius: 12px;
-      background: #141c33;
-    }
-    h1 { font-size: 2rem; margin: 0 0 0.5rem; }
-    p { margin: 0; opacity: 0.8; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Car Zone — Premium Auto Sales</title>
+<style>
+  :root{
+    --bg:#0a0e17; --panel:#121826; --line:#1f2a3f;
+    --gold:#d4af37; --gold-2:#f3d67e; --txt:#e9edf5; --muted:#93a0b8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1150px;margin:0 auto;padding:0 22px}
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:50;background:rgba(10,14,23,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{font-weight:800;font-size:1.35rem;letter-spacing:.5px}
+  .logo span{color:var(--gold)}
+  nav ul{display:flex;gap:30px;list-style:none}
+  nav a{color:var(--muted);font-size:.95rem;transition:.2s}
+  nav a:hover{color:var(--gold-2)}
+  .btn{display:inline-block;background:linear-gradient(135deg,var(--gold),#b8912a);color:#10131c;font-weight:700;padding:10px 22px;border-radius:8px;transition:.2s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,175,55,.35)}
+
+  /* HERO */
+  .hero{position:relative;padding:110px 0 90px;text-align:center;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(600px 300px at 50% 0%,rgba(212,175,55,.14),transparent 70%);}
+  .hero h1{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:800;letter-spacing:-1px}
+  .hero h1 em{font-style:normal;color:var(--gold)}
+  .hero p{color:var(--muted);max-width:560px;margin:18px auto 32px;font-size:1.08rem}
+  .hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--gold);color:var(--gold-2)}
+
+  /* STATS */
+  .stats{display:flex;gap:0;justify-content:center;flex-wrap:wrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:40px 0}
+  .stat{padding:26px 44px;text-align:center;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat b{display:block;font-size:1.9rem;color:var(--gold)}
+  .stat small{color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;font-size:.72rem}
+
+  /* SECTION */
+  section{padding:80px 0}
+  .kicker{color:var(--gold);text-transform:uppercase;letter-spacing:3px;font-size:.75rem;font-weight:700}
+  h2{font-size:clamp(1.7rem,4vw,2.4rem);margin:8px 0 40px}
+  .center{text-align:center}
+
+  /* CARDS */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:26px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(212,175,55,.5);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+  .thumb{height:190px;display:flex;align-items:center;justify-content:center;font-size:4rem;
+    background:linear-gradient(135deg,#182038,#0d1220)}
+  .badge{position:relative;top:14px;left:14px;display:inline-block;background:rgba(212,175,55,.15);color:var(--gold-2);
+    border:1px solid rgba(212,175,55,.4);font-size:.7rem;font-weight:700;letter-spacing:1px;
+    padding:4px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:-52px}
+  .card-body{padding:20px}
+  .card-body h3{font-size:1.15rem;margin-bottom:2px}
+  .card-body .yr{color:var(--muted);font-size:.85rem}
+  .price{font-size:1.35rem;font-weight:800;color:var(--gold);margin:10px 0}
+  .specs{display:flex;gap:14px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:12px;flex-wrap:wrap}
+  .specs span::before{content:"•";color:var(--gold);margin-right:5px}
+
+  /* SERVICES */
+  .svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+  .svc .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 22px}
+  .svc .item:hover{border-color:rgba(212,175,55,.4)}
+  .svc .ico{font-size:1.8rem;color:var(--gold);margin-bottom:12px}
+  .svc h3{font-size:1.05rem;margin-bottom:8px}
+  .svc p{color:var(--muted);font-size:.9rem}
+
+  /* CTA + FOOTER */
+  .cta-band{text-align:center;background:linear-gradient(135deg,#141b2e,#0d1220);border:1px solid var(--line);
+    border-radius:16px;padding:60px 30px}
+  .cta-band p{color:var(--muted);margin:12px auto 26px;max-width:480px}
+  footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;color:var(--muted);font-size:.85rem}
+  footer .logo{font-size:1.1rem}
+
+  @media(max-width:720px){nav ul{display:none}.stat{padding:20px 22px}}
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>Hello, Test Site</h1>
-    <p>A simple HTML site — ready to host.</p>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="logo">CAR <span>ZONE</span></div>
+      <ul>
+        <li><a href="#cars">Inventory</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a class="btn" href="#contact">Book a Test Drive</a>
+    </nav>
   </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="kicker">Premium Auto Sales</p>
+    <h1>Drive Your <em>Dream</em> Today</h1>
+    <p>Hand-picked, fully inspected, and competitively priced vehicles. Trade-ins welcome — financing available on the spot.</p>
+    <div class="cta">
+      <a class="btn" href="#cars">Browse Inventory</a>
+      <a class="btn ghost" href="#contact">Get Financing</a>
+    </div>
+  </div>
+  <div class="wrap stats">
+    <div class="stat"><b>500+</b><small>Cars Sold</small></div>
+    <div class="stat"><b>4.9★</b><small>Customer Rating</small></div>
+    <div class="stat"><b>12</b><small>Years in Business</small></div>
+    <div class="stat"><b>100%</b><small>Inspected</small></div>
+  </div>
+</section>
+
+<section id="cars">
+  <div class="wrap">
+    <p class="kicker">Featured</p>
+    <h2>Latest Arrivals</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="badge">Featured</div>
+        <div class="thumb">🚗</div>
+        <div class="card-body">
+          <h3>BMW 3 Series</h3><span class="yr">2022 · Sedan</span>
+          <div class="price">$38,900</div>
+          <div class="specs"><span>28k miles</span><span>Automatic</span><span>AWD</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge">New In</div>
+        <div class="thumb">🚙</div>
+        <div class="card-body">
+          <h3>Ford F-150</h3><span class="yr">2021 · Truck</span>
+          <div class="price">$34,500</div>
+          <div class="specs"><span>41k miles</span><span>4x4</span><span>V6 Eco</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge">Featured</div>
+        <div class="thumb">🚘</div>
+        <div class="card-body">
+          <h3>Mercedes C-Class</h3><span class="yr">2023 · Sedan</span>
+          <div class="price">$45,200</div>
+          <div class="specs"><span>15k miles</span><span>Automatic</span><span>RWD</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge">Hot Deal</div>
+        <div class="thumb">🏎️</div>
+        <div class="card-body">
+          <h3>Mustang GT</h3><span class="yr">2020 · Coupe</span>
+          <div class="price">$36,750</div>
+          <div class="specs"><span>33k miles</span><span>Manual</span><span>V8</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge">Family</div>
+        <div class="thumb">🚐</div>
+        <div class="card-body">
+          <h3>Toyota Highlander</h3><span class="yr">2022 · SUV</span>
+          <div class="price">$32,900</div>
+          <div class="specs"><span>30k miles</span><span>AWD</span><span>7 Seats</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="badge">Electric</div>
+        <div class="thumb">🔋</div>
+        <div class="card-body">
+          <h3>Tesla Model 3</h3><span class="yr">2023 · Electric</span>
+          <div class="price">$41,000</div>
+          <div class="specs"><span>12k miles</span><span>Autopilot</span><span>Long Range</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" style="background:#0d1220;border-top:1px solid var(--line)">
+  <div class="wrap">
+    <p class="kicker">Why Car Zone</p>
+    <h2>The Premium Difference</h2>
+    <div class="svc">
+      <div class="item"><div class="ico">🛠️</div><h3>150-Point Inspection</h3><p>Every vehicle is inspected, serviced and detailed before it reaches the lot.</p></div>
+      <div class="item"><div class="ico">💰</div><h3>Flexible Financing</h3><p>Bad credit, no credit — we work with 20+ lenders to get you approved fast.</p></div>
+      <div class="item"><div class="ico">🔄</div><h3>Trade-Ins Welcome</h3><p>Get a fair market offer for your current car in under 30 minutes.</p></div>
+      <div class="item"><div class="ico">🛡️</div><h3>Warranty Included</h3><p>Extended warranty and 7-day money-back guarantee on every purchase.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="cta-band">
+      <p class="kicker">Visit Us</p>
+      <h2>Book Your Test Drive</h2>
+      <p>Open Mon–Sat, 9am–7pm. Walk-ins welcome, or call ahead and we'll have the keys ready.</p>
+      <a class="btn" href="tel:+15555550123">📞 Call (555) 555-0123</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">CAR <span>ZONE</span></div>
+    <p style="margin-top:8px">© 2026 Car Zone · Premium Auto Sales · All rights reserved</p>
+  </div>
+</footer>
+
 </body>
 </html>
